@@ -2,7 +2,7 @@
  * License: Public Domain or MIT - choose whatever you want.
  * See LICENSE.md */
 
-void test_segment_parse_line(const std::string& line, std::u32string& string_without_breaks, std::u32string& string_with_breaks)
+bool test_segment_parse_line(const std::string& line, std::u32string& string_without_breaks, std::u32string& string_with_breaks)
 {
     string_without_breaks.clear();
     string_with_breaks.clear();
@@ -38,6 +38,8 @@ void test_segment_parse_line(const std::string& line, std::u32string& string_wit
 
         i = end;
     }
+
+    return true;
 }
 
 bool test_segment_grapheme()
@@ -58,7 +60,7 @@ bool test_segment_grapheme()
             continue;
 
         std::u32string string_without_breaks, string_with_breaks;
-        test_segment_parse_line(line, string_without_breaks, string_with_breaks);
+        TESTX(test_segment_parse_line(line, string_without_breaks, string_with_breaks));
 
         // Test here
 
@@ -174,7 +176,7 @@ bool test_segment_word()
             continue;
 
         std::u32string string_without_breaks, string_with_breaks;
-        test_segment_parse_line(line, string_without_breaks, string_with_breaks);
+        TESTX(test_segment_parse_line(line, string_without_breaks, string_with_breaks));
 
         // Test here
 
