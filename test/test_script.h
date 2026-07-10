@@ -268,8 +268,18 @@ test_constexpr bool test_script()
     TESTX(una::codepoint::get_script(0x11F00) == una::locale::script{"Kawi"}); // Kawi
     TESTX(una::codepoint::get_script(0x1E4D0) == una::locale::script{"Nagm"}); // Nag_Mundari
 
-    // Number of scripts in Unicode 15.0.0: 161 + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
-    //static_assert(una::detail::stage3_script.size() == 161 + 3);
+    // Unicode 16.0.0
+
+    TESTX(una::codepoint::get_script(0x10D40) == una::locale::script{"Gara"}); // Garay
+    TESTX(una::codepoint::get_script(0x16100) == una::locale::script{"Gukh"}); // Gurung_Khema
+    TESTX(una::codepoint::get_script(0x16D40) == una::locale::script{"Krai"}); // Kirat_Rai
+    TESTX(una::codepoint::get_script(0x1E5D0) == una::locale::script{"Onao"}); // Ol_Onal
+    TESTX(una::codepoint::get_script(0x11BC0) == una::locale::script{"Sunu"}); // Sunuwar
+    TESTX(una::codepoint::get_script(0x105C0) == una::locale::script{"Todr"}); // Todhri
+    TESTX(una::codepoint::get_script(0x11380) == una::locale::script{"Tutg"}); // Tulu_Tigalari
+
+    // Number of scripts in Unicode 16.0.0: 168 + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
+    //static_assert(una::detail::stage3_script.size() == 168 + 3);
 
     return true;
 }

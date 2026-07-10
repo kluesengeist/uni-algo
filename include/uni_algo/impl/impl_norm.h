@@ -22,8 +22,8 @@
 
 UNI_ALGO_IMPL_NAMESPACE_BEGIN
 
-// The buffer must not be less than 4(3)+30+18=52(51)
-// 4 is 4 starters, check norm_decomp_return why 4(3)
+// The buffer must not be less than 18+30+18=66
+// 18 is a conservative starter run limit, check norm_decomp_return why
 // 30 is the max number of non-starters
 // 18 is max decomposition (we use the end of the buffer to store the next decomposed code point)
 // Use 70 just because it means we need 70*4+70=350 bytes on stack for any normalization
@@ -39,7 +39,7 @@ uaix_const size_t impl_max_norm_non_starters    = 30; // tag_unicode_stable_valu
 // Quote "...sequences of non-starters longer than 30 characters in length..." from:
 // https://unicode.org/reports/tr15/#Stream_Safe_Text_Format
 
-uaix_const size_t impl_max_norm_decomp_canon    = 4;  // tag_unicode_unstable_value
+uaix_const size_t impl_max_norm_decomp_canon    = 18; // tag_unicode_unstable_value
 uaix_const size_t impl_max_norm_decomp_compat   = 18; // tag_unicode_unstable_value
 // Quote "A canonical mapping ... pair of characters, but is never longer than two characters"
 // and quote "Compatibility mappings are guaranteed to be no longer than 18 characters" from:
@@ -474,10 +474,10 @@ uaix_static bool norm_decomp_return(struct norm_buffer* const buffer, struct nor
     if (m->last_qc > 0)
         return true;
 
-    // More than 4 starters cannot compose together so flush the buffer.
+    // Flush very long starter runs conservatively.
     // In other words flush the buffer by CCC=0 boundary at this point.
-    // Note 1: actually 3 starters (Hanguls L+V+T and 0CCB) but use 4 (max canonical decomposition) just in case.
-    // Note 2: this check only matters for NFC/NFKC because in NFD/NFKD such cases are not possible.
+    // Note: this check only matters for NFC/NFKC because in NFD/NFKD such cases are not possible.
+    // Unicode 16.0.0 Gurung Khema vowel signs can compose across more than 4 CCC=0 starters.
     if (m->size > impl_max_norm_decomp_canon && buffer->ccc[m->size - 1] == 0)
     {
         m->last_qc = m->size - 1;

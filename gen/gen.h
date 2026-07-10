@@ -13,7 +13,7 @@
 // This header will be added to all generated files
 const std::string gen_header =
         "// GENERATED. DO NOT EDIT.\n\n"
-        "// Unicode 15.1.0\n\n";
+        "// Unicode 16.0.0\n\n";
 
 // How to use: just copy paste this file into your Hello World or whatever and download Unicode data files.
 // Check generator() function at the end of the file for a list of the files that are needed for the generator.
@@ -467,7 +467,7 @@ static void new_generator_special_casing(const std::string& file1, const std::st
         }
     }
 
-    // In the current version of Unicode (3.2.0 - 15.0.0) there is only 1 special case for lower and we handle it in place
+    // In the current version of Unicode (3.2.0 - 16.0.0) there is only 1 special case for lower and we handle it in place
     // if it will change in the future we have this assert and then we probably should handle lower the same way as upper
     // but probably it will never change.
     ASSERTX(!(column == 1 && (vec.size() / 4 - 1) != 1));
@@ -1720,7 +1720,7 @@ static void new_generator_prop(const std::string& file1, const std::string& file
         }
     }
 
-    new_generator_output(file1, file2, 8, 8, true, map);
+    new_generator_output(file1, file2, 16, 8, true, map);
 }
 
 static void new_generator_case_locale(const std::string& file1, const std::string& file2)
@@ -1957,9 +1957,9 @@ void new_generator_script(const std::string& file1, const std::string& file2, co
 
     // NOTE: The size of vec must be the number of scripts in the current
     // Unicode version + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
-    // For example for Unicode 15.0.0 it's 164 (161 scripts + 3 special scripts)
+    // For example for Unicode 16.0.0 it's 171 (168 scripts + 3 special scripts)
 
-    new_generator_output(file1, file2, 8, 8, true, map); // stage1/2
+    new_generator_output(file1, file2, 16, 8, true, map); // stage1/2
     new_generator_output2(file3, vec, 32); // stage3
 }
 
@@ -1978,6 +1978,7 @@ void new_generator_script_ext(const std::string& file1, const std::string& file2
 
     std::vector<uint32_t> vec(1, 0);
     std::size_t vec_index = 0;
+    std::map<std::string, std::size_t> map_script_ext;
 
     std::string line;
     while (std::getline(input, line))
@@ -1988,21 +1989,54 @@ void new_generator_script_ext(const std::string& file1, const std::string& file2
         {
             semicolon += 2;
 
-            vec_index = vec.size();
-            vec.push_back(0);
-            std::size_t count = 0;
+            std::size_t end = line.find('#', semicolon);
+            ASSERTX(end != std::string::npos);
 
             ASSERTX(line[semicolon] >= 'A' && line[semicolon] <= 'Z');
 
-            for (std::size_t i = semicolon; line[i] != '#'; i += 5, ++count)
+            std::string key;
+            std::vector<uint32_t> scripts;
+
+            for (std::size_t i = semicolon; i < end;)
             {
+                while (i < end && (line[i] == ' ' || line[i] == '\t' || line[i] == '\r' || line[i] == '\n'))
+                    ++i;
+
+                if (i == end)
+                    break;
+
+                std::size_t token_end = line.find_first_of(" \t\r\n", i);
+                if (token_end == std::string::npos || token_end > end)
+                    token_end = end;
+
+                ASSERTX(token_end - i == 4);
+
+                if (!key.empty())
+                    key += ' ';
+                key += line.substr(i, token_end - i);
+
                 // Store scripts in the same format as our locale::script uses
-                vec.push_back(((line[i] & 0xFF) << 24) | ((line[i+1] & 0xFF) << 16) | ((line[i+2] & 0xFF) << 8) | (line[i+3] & 0xFF));
+                scripts.push_back(((line[i] & 0xFF) << 24) | ((line[i+1] & 0xFF) << 16) | ((line[i+2] & 0xFF) << 8) | (line[i+3] & 0xFF));
+
+                i = token_end;
             }
 
-            ASSERTX(count != 0);
+            ASSERTX(!scripts.empty());
 
-            vec[vec_index] = count;
+            auto found = map_script_ext.find(key);
+            if (found == map_script_ext.end())
+            {
+                // Unicode 16.0.0 sorts ScriptExtensions.txt by code point, so identical
+                // script sets are no longer naturally grouped in the input file.
+                vec_index = vec.size();
+                map_script_ext[key] = vec_index;
+                vec.push_back((uint32_t)scripts.size());
+                vec.insert(vec.end(), scripts.begin(), scripts.end());
+            }
+            else
+            {
+                vec_index = found->second;
+            }
 
             uint32_t c1 = (uint32_t)strtoul(line.c_str(), 0, 16);
             uint32_t c2 = c1;

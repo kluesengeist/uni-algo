@@ -4,6 +4,9 @@ See commit history between tags for details.
 
 ## v1.X.X (TBD)
 - Fixed broken compilation in ranges in some cases ([#37](https://github.com/uni-algo/uni-algo/issues/37)). Thanks [@unixod](https://github.com/unixod).
+- Updated to Unicode 16.0.0
+- Updated the Unicode data generator for Unicode 16 script/property table growth and reordered ScriptExtensions.txt data.
+- Fixed NFC/NFKC normalization for Unicode 16 Gurung Khema composition sequences.
 
 ## [v1.2.0](https://github.com/uni-algo/uni-algo/tree/v1.2.0) (2023-12-11)
 - Fixed lifetime issue with ranges in some cases (ABI change) ([#35](https://github.com/uni-algo/uni-algo/pull/35)). Thanks [@unixod](https://github.com/unixod).
