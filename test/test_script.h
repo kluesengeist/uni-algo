@@ -278,8 +278,15 @@ test_constexpr bool test_script()
     TESTX(una::codepoint::get_script(0x105C0) == una::locale::script{"Todr"}); // Todhri
     TESTX(una::codepoint::get_script(0x11380) == una::locale::script{"Tutg"}); // Tulu_Tigalari
 
-    // Number of scripts in Unicode 16.0.0: 168 + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
-    //static_assert(una::detail::stage3_script.size() == 168 + 3);
+    // Unicode 17.0.0
+
+    TESTX(una::codepoint::get_script(0x16EA0) == una::locale::script{"Berf"}); // Beria_Erfe
+    TESTX(una::codepoint::get_script(0x10940) == una::locale::script{"Sidt"}); // Sidetic
+    TESTX(una::codepoint::get_script(0x1E6C0) == una::locale::script{"Tayo"}); // Tai_Yo
+    TESTX(una::codepoint::get_script(0x11DB0) == una::locale::script{"Tols"}); // Tolong_Siki
+
+    // Number of scripts in Unicode 17.0.0: 172 + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
+    //static_assert(una::detail::stage3_script.size() == 172 + 3);
 
     return true;
 }

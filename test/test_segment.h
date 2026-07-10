@@ -2,6 +2,44 @@
  * License: Public Domain or MIT - choose whatever you want.
  * See LICENSE.md */
 
+void test_segment_parse_line(const std::string& line, std::u32string& string_without_breaks, std::u32string& string_with_breaks)
+{
+    string_without_breaks.clear();
+    string_with_breaks.clear();
+
+    for (std::size_t i = 0; i < line.size();)
+    {
+        while (i < line.size() && (line[i] == ' ' || line[i] == '\t'))
+            ++i;
+
+        if (i == line.size() || line[i] == '#')
+            break;
+
+        std::size_t end = i;
+        while (end < line.size() && line[end] != ' ' && line[end] != '\t' && line[end] != '#')
+            ++end;
+
+        const std::string token = line.substr(i, end - i);
+
+        if (token == "\xC3\xB7")
+        {
+            string_with_breaks += std::u32string{0x00F7};
+        }
+        else if (token != "\xC3\x97")
+        {
+            char* parse_end = nullptr;
+            uint32_t c = (uint32_t)strtoul(line.c_str() + i, &parse_end, 16);
+
+            TESTX(parse_end == line.c_str() + end);
+
+            string_without_breaks += std::u32string{c};
+            string_with_breaks += std::u32string{c};
+        }
+
+        i = end;
+    }
+}
+
 bool test_segment_grapheme()
 {
     std::ifstream input("GraphemeBreakTest.txt", std::ios::binary);
@@ -19,34 +57,8 @@ bool test_segment_grapheme()
         if (line.empty() || line[0] == '#' || line[0] == '@')
             continue;
 
-        std::u32string line32 = una::utf8to32u(line);
-
         std::u32string string_without_breaks, string_with_breaks;
-
-        for (size_t i = 0; i < line.size(); i++)
-        {
-            if (i == 0 || line32[i] == 0x00D7 || line32[i] == 0x00F7 || line32[i] == '#')
-            {
-                if (line32[i] == '#')
-                    break;
-
-                //if (line32[i] == 0x00D7)
-                //	string_with_breaks += std::u32string{0x00D7};
-                if (line32[i] == 0x00F7)
-                    string_with_breaks += std::u32string{0x00F7};
-
-                if (line32[i] == 0x00D7 || line32[i] == 0x00F7)
-                    i++;
-
-                uint32_t c = (uint32_t)strtoul(una::utf32to8(line32.c_str()+i).c_str(), 0, 16);
-
-                if (c != 0)
-                {
-                    string_without_breaks += std::u32string{c};
-                    string_with_breaks += std::u32string{c};
-                }
-            }
-        }
+        test_segment_parse_line(line, string_without_breaks, string_with_breaks);
 
         // Test here
 
@@ -161,34 +173,8 @@ bool test_segment_word()
         if (line.empty() || line[0] == '#' || line[0] == '@')
             continue;
 
-        std::u32string line32 = una::utf8to32u(line);
-
         std::u32string string_without_breaks, string_with_breaks;
-
-        for (size_t i = 0; i < line.size(); i++)
-        {
-            if (i == 0 || line32[i] == 0x00D7 || line32[i] == 0x00F7 || line32[i] == '#')
-            {
-                if (line32[i] == '#')
-                    break;
-
-                //if (line32[i] == 0x00D7)
-                //	string_with_breaks += std::u32string{0x00D7};
-                if (line32[i] == 0x00F7)
-                    string_with_breaks += std::u32string{0x00F7};
-
-                if (line32[i] == 0x00D7 || line32[i] == 0x00F7)
-                    i++;
-
-                uint32_t c = (uint32_t)strtoul(una::utf32to8(line32.c_str()+i).c_str(), 0, 16);
-
-                if (c != 0)
-                {
-                    string_without_breaks += std::u32string{c};
-                    string_with_breaks += std::u32string{c};
-                }
-            }
-        }
+        test_segment_parse_line(line, string_without_breaks, string_with_breaks);
 
         // Test here
 

@@ -1,21 +1,21 @@
 // GENERATED. DO NOT EDIT.
 
-// Unicode 16.0.0
+// Unicode 17.0.0
 
 UNI_ALGO_IMPL_NAMESPACE_BEGIN
 
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_lower, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_lower, 4736);
+UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_lower, 4864);
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_upper, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_upper, 5632);
+UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_upper, 5760);
 #ifndef UNI_ALGO_DISABLE_SEGMENT_WORD
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_title, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_title, 5504);
+UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_title, 5632);
 #endif
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_fold, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_fold, 5120);
+UNI_ALGO_DLL extern const uaix_data_array(type_codept,     stage2_fold, 5248);
 UNI_ALGO_DLL extern const uaix_data_array(unsigned short,  stage1_order, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(unsigned short,  stage2_order, 45824);
+UNI_ALGO_DLL extern const uaix_data_array(unsigned short,  stage2_order, 45952);
 #ifndef UNI_ALGO_DISABLE_FULL_CASE
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_special_upper, 512);
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage2_special_upper, 1280);
@@ -35,6 +35,6 @@ UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage2_special_fold, 
 UNI_ALGO_DLL extern const uaix_data_array2(unsigned short, stage3_special_fold, 105, 4);
 #endif
 UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage1_case_prop, 8704);
-UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage2_case_prop, 21376);
+UNI_ALGO_DLL extern const uaix_data_array(unsigned char,   stage2_case_prop, 21760);
 
 UNI_ALGO_IMPL_NAMESPACE_END

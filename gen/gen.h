@@ -13,7 +13,7 @@
 // This header will be added to all generated files
 const std::string gen_header =
         "// GENERATED. DO NOT EDIT.\n\n"
-        "// Unicode 16.0.0\n\n";
+        "// Unicode 17.0.0\n\n";
 
 // How to use: just copy paste this file into your Hello World or whatever and download Unicode data files.
 // Check generator() function at the end of the file for a list of the files that are needed for the generator.
@@ -467,7 +467,7 @@ static void new_generator_special_casing(const std::string& file1, const std::st
         }
     }
 
-    // In the current version of Unicode (3.2.0 - 16.0.0) there is only 1 special case for lower and we handle it in place
+    // In the current version of Unicode (3.2.0 - 17.0.0) there is only 1 special case for lower and we handle it in place
     // if it will change in the future we have this assert and then we probably should handle lower the same way as upper
     // but probably it will never change.
     ASSERTX(!(column == 1 && (vec.size() / 4 - 1) != 1));
@@ -1957,7 +1957,7 @@ void new_generator_script(const std::string& file1, const std::string& file2, co
 
     // NOTE: The size of vec must be the number of scripts in the current
     // Unicode version + 3 special scripts: Unknown (Zzzz), Common (Zyyy), Inherited (Zinh)
-    // For example for Unicode 16.0.0 it's 171 (168 scripts + 3 special scripts)
+    // For example for Unicode 17.0.0 it's 175 (172 scripts + 3 special scripts)
 
     new_generator_output(file1, file2, 16, 8, true, map); // stage1/2
     new_generator_output2(file3, vec, 32); // stage3
@@ -2026,7 +2026,7 @@ void new_generator_script_ext(const std::string& file1, const std::string& file2
             auto found = map_script_ext.find(key);
             if (found == map_script_ext.end())
             {
-                // Unicode 16.0.0 sorts ScriptExtensions.txt by code point, so identical
+                // Unicode 16.0.0 and later sort ScriptExtensions.txt by code point, so identical
                 // script sets are no longer naturally grouped in the input file.
                 vec_index = vec.size();
                 map_script_ext[key] = vec_index;
